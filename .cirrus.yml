@@ -64,8 +64,8 @@ Windows_task:
   ninja-setup_cache:
     folder: C:\\Ninja
     populate_script: |
-      choco install -y --no-progress ninja --params "/InstallDir:C:\Ninja"
-      dir C:\Ninja
+      choco install -y --no-progress ninja
+      dir C:\ProgramData\chocolatey\lib\ninja\tools
   msbuild-setup_script: choco install -y --no-progress microsoft-build-tools
   <<: *pipeline
 
