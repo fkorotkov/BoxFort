@@ -50,11 +50,18 @@ windows_task:
   windows_container:
     image: cirrusci/windowsservercore:2019
     os_version: 2019
-  setup_script: |
-    choco install -y --no-progress ninja
-    choco install -y --no-progress python3 --params "/InstallDir:C:\Python"
-    py -m pip install meson
-    dir C:\Python
-    dir C:\Python\Scripts
+  env:
+    PATH: C:\\Python;C:\\Python\\Scripts;%PATH%
+  meson-setup_cache:
+    folder: C:\\Python
+    populate_script: |
+      choco install -y --no-progress python3 --params "/InstallDir:C:\Python"
+      pip install meson
+  ninja-setup_cache:
+    folder: C:\\Ninja
+    populate_script: |
+      choco install -y --no-progress ninja --params "/InstallDir:C:\Ninja"
+      dir C:\Ninja
+  msbuild-setup_script: choco install -y --no-progress microsoft-build-tools
   <<: *pipeline
 
