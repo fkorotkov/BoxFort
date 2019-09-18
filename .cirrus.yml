@@ -34,3 +34,28 @@ alpine_aarch64_task:
   env:
     CIRRUS_SHELL: /sbin/qemu-sh
   <<: *pipeline
+
+macos_task:
+  osx_instance:
+    image: mojave-xcode-10.2
+  setup_script: brew install meson
+  <<: *pipeline
+
+freebsd_task:
+  freebsd_instance:
+    image_family: freebsd-12-0
+  setup_script: pkg install -y meson
+  <<: *pipeline
+
+windows_task:
+  windows_container:
+    image: cirrusci/windowsservercore:2019
+    os_version: 2019
+  setup_script: |
+    choco install -y --no-progress ninja
+    choco install -y --no-progress python3 --params "/InstallDir:C:\Python"
+    py -m pip install meson
+    dir C:\Python
+    dir C:\Python\Scripts
+  <<: *pipeline
+
