@@ -1,4 +1,8 @@
 _pipeline: &pipeline
+  info_script: |
+    meson --version
+    python --version
+    ninja --version
   configure_cache:
     folder: build
     populate_script: meson build
