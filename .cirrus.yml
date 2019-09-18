@@ -9,48 +9,48 @@ _pipeline: &pipeline
   compile_script: ninja -C build
   test_script: ninja -C build test
 
-debian_gcc_task:
+Debian (gcc)_task:
   container:
     image: snaipe/ci-meson:debian-10
   <<: *pipeline
 
-alpine_x86_64_task:
+Alpine (gcc,x86_64)_task:
   container:
     image: snaipe/ci-meson:alpine
   <<: *pipeline
 
-alpine_i386_task:
+Alpine (gcc,i386)_task:
   container:
     image: snaipe/ci-meson:alpine-x86
   <<: *pipeline
 
-alpine_arm_task:
+Alpine (gcc,arm)_task:
   container:
     image: snaipe/ci-meson:alpine-armhf
   env:
     CIRRUS_SHELL: /sbin/qemu-sh
   <<: *pipeline
 
-alpine_aarch64_task:
+Alpine (gcc,aarch64)_task:
   container:
     image: snaipe/ci-meson:alpine-aarch64
   env:
     CIRRUS_SHELL: /sbin/qemu-sh
   <<: *pipeline
 
-macos_task:
+MacOS_task:
   osx_instance:
     image: mojave-xcode-10.2
   setup_script: brew install meson
   <<: *pipeline
 
-freebsd_task:
+FreeBSD_task:
   freebsd_instance:
     image_family: freebsd-12-0
   setup_script: pkg install -y meson
   <<: *pipeline
 
-windows_task:
+Windows_task:
   windows_container:
     image: cirrusci/windowsservercore:2019
     os_version: 2019
