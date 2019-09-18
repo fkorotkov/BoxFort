@@ -1,10 +1,11 @@
 _pipeline: &pipeline
   info_script: |
     meson --version
-    python --version
     ninja --version
   configure_cache:
     folder: build
+    #fingerprint_script: |-
+    #  find -name meson.build -exec sha256sum {} \;
     populate_script: meson build
   compile_script: ninja -C build
   test_script: ninja -C build test
@@ -55,17 +56,23 @@ Windows_task:
     image: cirrusci/windowsservercore:2019
     os_version: 2019
   env:
-    PATH: C:\\Python;C:\\Python\\Scripts;%PATH%
+    PATH: C:\\Python;C:\\Python\\Scripts;C:\\ProgramData\\chocolatey\\lib\\ninja\\tools;%PATH%
   meson-setup_cache:
     folder: C:\\Python
-    populate_script: |
+    populate_script: |-
       choco install -y --no-progress python3 --params "/InstallDir:C:\Python"
       pip install meson
   ninja-setup_cache:
-    folder: C:\\Ninja
-    populate_script: |
-      choco install -y --no-progress ninja
-      dir C:\ProgramData\chocolatey\lib\ninja\tools
-  msbuild-setup_script: choco install -y --no-progress microsoft-build-tools
-  <<: *pipeline
+    folder: C:\\ProgramData\\chocolatey\\lib\\ninja\\tools
+    populate_script: choco install -y --no-progress ninja
+  msbuild-setup_script: |-
+    choco install -y --no-progress microsoft-build-tools --params "--add Microsoft.VisualStudio.Product.BuildTools"|| VER>NUL
+    dir "C:\Program Files (x86)\Microsoft Visual Studio\2017\BuildTools\VC\Auxiliary\Build" || VER>NUL
+    dir "C:\Program Files (x86)\Microsoft Visual Studio\2017\BuildTools\VC\Auxiliary" || VER>NUL
+    dir "C:\Program Files (x86)\Microsoft Visual Studio\2017\BuildTools\VC" || VER>NUL
+    dir "C:\Program Files (x86)\Microsoft Visual Studio\2017\BuildTools" || VER>NUL
+    dir "C:\Program Files (x86)\Microsoft Visual Studio\2017" || VER>NUL
+    cl /v || VER>NUL
+    dir C:\VS
+  #<<: *pipeline
 
